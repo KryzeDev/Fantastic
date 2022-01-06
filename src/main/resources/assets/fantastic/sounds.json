@@ -1,0 +1,32 @@
+{
+    "entity.chocobo.ambient": {
+        "category": "entity",
+        "subtitle": "entity.chocobo.ambient",
+        "sounds": [
+            {
+                "name": "fantastic:entity/chocobo/ambient",
+                "stream": true
+            }
+        ]
+    },
+    "entity.chocobo.hurt": {
+        "category": "entity",
+        "subtitle": "entity.chocobo.hurt",
+        "sounds": [
+            {
+                "name": "fantastic:entity/chocobo/hurt",
+                "stream": true
+            }
+        ]
+    },
+    "entity.chocobo.death": {
+        "category": "entity",
+        "subtitle": "entity.chocobo.death",
+        "sounds": [
+            {
+                "name": "fantastic:entity/chocobo/death",
+                "stream": true
+            }
+        ]
+    }
+}
