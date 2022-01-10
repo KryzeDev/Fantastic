@@ -5,6 +5,7 @@ import com.kryze.fantastic.server.creativetab.CreativeTabHandler;
 import com.kryze.fantastic.server.entity.EntityHandler;
 import com.kryze.fantastic.server.item.ItemHandler;
 import com.kryze.fantastic.server.sound.SoundHandler;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -34,5 +35,9 @@ public class Fantastic {
     }
 
     private void onCommonSetup(FMLCommonSetupEvent event) {
+    }
+
+    public static ResourceLocation createResourceLocation(String path) {
+        return new ResourceLocation(MOD_ID, path);
     }
 }

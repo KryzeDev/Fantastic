@@ -1,7 +1,6 @@
 package com.kryze.fantastic.client.render.entity;
 
 import com.kryze.fantastic.client.model.entity.ModelChocobo;
-import com.kryze.fantastic.client.render.entity.layer.SaddleChocoboLayer;
 import com.kryze.fantastic.server.entity.chocobo.EntityChocobo;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -15,7 +14,6 @@ public class RenderChocobo extends GeoEntityRenderer<EntityChocobo>{
 
     public RenderChocobo(EntityRendererManager renderManager) {
         super(renderManager, new ModelChocobo());
-        this.addLayer(new SaddleChocoboLayer(this));
     }
 
     @Override
