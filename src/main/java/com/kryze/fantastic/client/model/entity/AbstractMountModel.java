@@ -18,4 +18,3 @@ public abstract class AbstractMountModel<T extends EntityChocobo> extends Animat
     public abstract @NotNull
     ResourceLocation getRegularTexture(T t);
 }
-

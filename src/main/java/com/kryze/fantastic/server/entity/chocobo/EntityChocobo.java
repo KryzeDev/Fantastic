@@ -3,9 +3,7 @@ package com.kryze.fantastic.server.entity.chocobo;
 import com.kryze.fantastic.server.item.ItemHandler;
 import com.kryze.fantastic.server.sound.SoundHandler;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.AgeableEntity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.*;
@@ -18,6 +16,8 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -35,6 +35,8 @@ public class EntityChocobo extends TameableEntity implements IAnimatable {
     private static final DataParameter<Boolean> SADDLED = EntityDataManager.createKey(EntityChocobo.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> SITTING = EntityDataManager.createKey(EntityChocobo.class, DataSerializers.BOOLEAN);
     public boolean forcedSit = false;
+    public float standProgress;
+    public float sitProgress;
 
     private AnimationFactory factory = new AnimationFactory(this);
 
@@ -130,7 +132,7 @@ public class EntityChocobo extends TameableEntity implements IAnimatable {
                     this.setSaddled(true);
                     world.playSound(null, getPosX(), getPosY(), getPosZ(), SoundEvents.ENTITY_HORSE_SADDLE, getSoundCategory(), 1, 1);
                     return ActionResultType.SUCCESS;
-                }else if(this.isSaddled() && !playerIn.isSneaking()) {
+                }else if(this.isSaddled() && !playerIn.isSneaking() && !this.isSitting()) {
                     playerIn.startRiding(this);
                 }else {
                     if(this.isSitting()){
@@ -162,6 +164,20 @@ public class EntityChocobo extends TameableEntity implements IAnimatable {
         return super.getEntityInteractionResult(playerIn, hand);
     }
 
+    public void travel(Vector3d vec3d) {
+        if (!this.shouldMove()) {
+            if (this.getNavigator().getPath() != null) {
+                this.getNavigator().clearPath();
+            }
+            vec3d = Vector3d.ZERO;
+        }
+        super.travel(vec3d);
+    }
+
+    public boolean shouldMove() {
+        return !isSitting();
+    }
+
     private <T extends IAnimatable> PlayState predicate(AnimationEvent<T> event) {
         if(event.isMoving()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
@@ -178,9 +194,32 @@ public class EntityChocobo extends TameableEntity implements IAnimatable {
         }
     }
 
+    public void updatePassenger(Entity passenger) {
+        if (this.isPassenger(passenger)) {
+            float sitAdd = -0.065F * this.sitProgress;
+            float standAdd = -0.07F * this.standProgress;
+            float radius = standAdd + sitAdd;
+            float angle = (0.01745329251F * this.renderYawOffset);
+            double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+            double extraZ = radius * MathHelper.cos(angle);
+            passenger.setPosition(this.getPosX() + extraX, this.getPosY() + this.getMountedYOffset() + passenger.getYOffset(), this.getPosZ() + extraZ);
+        }
+    }
+
+    @Nullable
+    public Entity getControllingPassenger() {
+        for (Entity passenger : this.getPassengers()) {
+            if (passenger instanceof PlayerEntity) {
+                PlayerEntity player = (PlayerEntity) passenger;
+                return player;
+            }
+        }
+        return null;
+    }
+
     @Override
     public double getMountedYOffset() {
-        return 1.0D;
+        return 1.5D;
     }
 
     protected void dropInventory() {

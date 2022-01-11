@@ -22,6 +22,13 @@ public class RenderChocobo extends GeoEntityRenderer<EntityChocobo>{
     }
 
     @Override
+    public void render(EntityChocobo entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
+        stack.scale(1.5f, 1.5f, 1.5f);
+        super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
+
+    }
+
+    @Override
     public RenderType getRenderType(EntityChocobo animatable, float partialTicks, MatrixStack stack,
                                     IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn,
                                     ResourceLocation textureLocation) {

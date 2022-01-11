@@ -19,7 +19,7 @@ public class EntityHandler {
     public static EntityType<EntityChocobo> CHOCOBO;
 
     public static void register() {
-        CHOCOBO = register("chocobo", EntityType.Builder.create(EntityChocobo::new, EntityClassification.CREATURE).size(1.4f, 3.4f));
+        CHOCOBO = register("chocobo", EntityType.Builder.create(EntityChocobo::new, EntityClassification.CREATURE).size(1.4f, 2.0f));
 
         ForgeRegistries.ENTITIES.registerAll(
                 CHOCOBO
